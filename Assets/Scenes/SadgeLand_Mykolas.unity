@@ -1005,7 +1005,7 @@ GameObject:
   - component: {fileID: 1018757619}
   - component: {fileID: 1018757618}
   - component: {fileID: 1018757617}
-  - component: {fileID: 1018757622}
+  - component: {fileID: 1018757624}
   - component: {fileID: 1018757623}
   m_Layer: 3
   m_Name: Capsule (1)
@@ -1129,37 +1129,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1018757622
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1018757614}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7c0bd4f71775e248bef39c0c3512e52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 30
-  runSpeed: 30
-  drag: 10
-  maxWalkSpeed: 5
-  maxRunSpeed: 10
-  jumpHeight: 5
-  groundCheck: {fileID: 0}
-  gravity: 9.81
-  lerp: 0.2
-  viewDistance: 100
-  viewConeDegrees: 30
-  playerTransform: {fileID: 188564291}
-  Waypoints:
-  - {fileID: 98431103}
-  - {fileID: 368759783}
-  - {fileID: 1520825}
-  - {fileID: 113264254}
-  - {fileID: 79859361}
-  circlingRadius: 10
 --- !u!195 &1018757623
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1182,6 +1151,41 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1018757624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1018757614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d75d531ddee8e04d9d699f90ee8f23f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 30
+  runSpeed: 30
+  drag: 10
+  maxWalkSpeed: 5
+  maxRunSpeed: 10
+  jumpHeight: 2
+  groundCheck: {fileID: 0}
+  gravity: 9.81
+  lerp: 0.2
+  viewDistance: 30
+  viewConeDegrees: 30
+  playerTransform: {fileID: 188564291}
+  Waypoints:
+  - {fileID: 98431103}
+  - {fileID: 368759783}
+  - {fileID: 1520825}
+  - {fileID: 113264254}
+  - {fileID: 79859361}
+  circlingRadius: 10
+  waypointDelayFixed: 3
+  randomisedDelay: 1
+  waypointDelayMax: 5
+  waypointDelayMin: 4
 --- !u!1 &1318010327
 GameObject:
   m_ObjectHideFlags: 0
