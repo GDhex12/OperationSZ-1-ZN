@@ -152,12 +152,16 @@ public class Weaponscontrol : MonoBehaviour
         {
             // if (ThisIsGrabbed.grabbed)
             // {
-            //     if (!leverAction)
-            //         return (mouse.leftButton.ReadValue() == 1 || lFireAction.action.ReadValue<float>() >= 0.2 && ThisIsGrabbed.lgrabbed || rFireAction.action.ReadValue<float>() >= 0.2 && ThisIsGrabbed.rgrabbed);
-            //     else
-            //         return (mouse.leftButton.ReadValue() == 1 && mouse.leftButton.wasPressedThisFrame || lFireAction.action.ReadValue<float>() >= 0.2 && ThisIsGrabbed.lgrabbed && lFireAction.action.WasPressedThisFrame() || rFireAction.action.ReadValue<float>() >= 0.2 && ThisIsGrabbed.rgrabbed && rFireAction.action.WasPressedThisFrame());
+            //if (!leverAction)
+            //   return (mouse.leftButton.ReadValue() == 1 || lFireAction.action.ReadValue<float>() >= 0.2 && ThisIsGrabbed.lgrabbed || rFireAction.action.ReadValue<float>() >= 0.2 && ThisIsGrabbed.rgrabbed);
+            //else
+            //    return (mouse.leftButton.ReadValue() == 1 && mouse.leftButton.wasPressedThisFrame || lFireAction.action.ReadValue<float>() >= 0.2 && ThisIsGrabbed.lgrabbed && lFireAction.action.WasPressedThisFrame() || rFireAction.action.ReadValue<float>() >= 0.2 && ThisIsGrabbed.rgrabbed && rFireAction.action.WasPressedThisFrame());
             // }
-             return (mouse.leftButton.ReadValue() == 1);
+            // return (mouse.leftButton.ReadValue() == 1);
+            if (!leverAction)
+                return (mouse.leftButton.ReadValue() == 1);
+            else
+                return (mouse.leftButton.ReadValue() == 1 && mouse.leftButton.wasPressedThisFrame);
         }
         else
         {

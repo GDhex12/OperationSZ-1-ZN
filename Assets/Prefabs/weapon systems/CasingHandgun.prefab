@@ -34,7 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
 --- !u!33 &5920418808830320243
 MeshFilter:
@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: cf3f287e163513f448f93f6edabc3cc6, type: 2}
+  - {fileID: 2100000, guid: 99cf6c846ecb497459e270e0d4168e39, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -118,7 +118,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 347577096988821816}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8740b6b503efcb74aa317061fb2d6430, type: 3}
+  m_Script: {fileID: 11500000, guid: daac844dc307b5c4fbf39f835c821dbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   time: 5

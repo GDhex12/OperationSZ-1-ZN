@@ -94,7 +94,6 @@ public class AIMovement : MonoBehaviour
                 pathPoints.Add(point);
             }
         }
-        Debug.Log(timeDelay);
         if(randomisedDelay && waypointDelay < timeDelay)
         {
             UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
