@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CharacterController : MonoBehaviour
+public class CharacterMovement : MonoBehaviour
 {
     Controls playerInput;
     Vector2 movement_dir;
