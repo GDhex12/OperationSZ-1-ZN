@@ -36,6 +36,8 @@ public class AIMovement : MonoBehaviour
     private float viewConeDegrees;
     [SerializeField]
     private Transform playerTransform;
+    [SerializeField]
+    private Transform gunBarrelEnd;
 
 
     int newpathindex = 0;
@@ -212,9 +214,17 @@ public class AIMovement : MonoBehaviour
             rb.AddForce(-rb.velocity * drag);
         }
         rb.AddForce(transform.up * -gravity);
-        Vector3 vecInterpol = Vector3.Slerp(transform.forward, movement_rel, lerp);
-        if((transform.position - Path).magnitude > 5f)
+        Vector3 vecInterpol = Vector3.zero;
+        float angle = 0;
+        if (!playerSeen)
+        vecInterpol = Vector3.Slerp(transform.forward, movement_rel, lerp);
+        else
+        angle = Vector3.SignedAngle(gunBarrelEnd.forward, Path-gunBarrelEnd.position,Vector3.up);
+
+        if ((transform.position - Path).magnitude > 5f && !playerSeen)
         transform.rotation = Quaternion.LookRotation(vecInterpol);
+        if (playerSeen)
+            transform.rotation *= Quaternion.FromToRotation(Vector3.Project(gunBarrelEnd.forward,Vector3.up), Vector3.Project(Path - gunBarrelEnd.position,Vector3.up));
 
         float dotResult = (90 - viewConeDegrees) / 90;
 
