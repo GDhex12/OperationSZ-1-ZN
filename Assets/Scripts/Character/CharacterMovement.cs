@@ -28,6 +28,10 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField]
     private float gravity;
 
+    [SerializeField] private bool pickupTriggered = false;
+    [SerializeField] private GameObject pickupItem = null;
+    [SerializeField] private Transform itemLocation;
+
     Vector3 movement_rel;
 
     // Start is called before the first frame update
@@ -54,6 +58,36 @@ public class CharacterMovement : MonoBehaviour
     {
         if (context.performed)
             jump = true;
+    }
+
+    public void OnPickUp(InputAction.CallbackContext context)
+    {
+        if (context.performed && pickupTriggered)
+        {
+            Debug.Log("performed pickup");
+            pickupItem.GetComponent<BoxCollider>().enabled = false;
+            pickupItem.transform.parent = itemLocation;
+
+            pickupItem.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            pickupItem.transform.localScale = Vector3.one;
+
+            pickupTriggered = false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == 6)
+        {
+            Debug.Log("correct layer");
+            pickupItem = other.gameObject;
+            pickupTriggered = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        pickupTriggered = false;
     }
 
     // Update is called once per frame
