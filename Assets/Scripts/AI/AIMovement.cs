@@ -212,6 +212,7 @@ public class AIMovement : MonoBehaviour
         {
             rb.AddForce(-rb.velocity * drag);
         }
+        rb.AddForce(transform.up * -gravity);
         Vector3 vecInterpol = Vector3.Slerp(transform.forward, movement_rel, lerp);
         if((transform.position - Path).magnitude > 5f)
         transform.rotation = Quaternion.LookRotation(vecInterpol);
