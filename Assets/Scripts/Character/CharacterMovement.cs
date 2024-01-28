@@ -29,6 +29,7 @@ public class CharacterMovement : MonoBehaviour
     private float gravity;
 
     [SerializeField] private bool pickupTriggered = false;
+    [SerializeField] private bool holdingItem = false;
     [SerializeField] private GameObject pickupItem = null;
     [SerializeField] private Transform itemLocation;
 
@@ -64,14 +65,29 @@ public class CharacterMovement : MonoBehaviour
     {
         if (context.performed && pickupTriggered)
         {
-            Debug.Log("performed pickup");
+            if (pickupItem.TryGetComponent(out Weaponscontrol wc))
+            {
+                wc.activate = true;
+            }
             pickupItem.GetComponent<BoxCollider>().enabled = false;
             pickupItem.transform.parent = itemLocation;
 
             pickupItem.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-            pickupItem.transform.localScale = Vector3.one;
+
+            // I thought up this tasteful hardcoded value to make this game more funny
+            pickupItem.transform.localScale = new Vector3(0.7f, 30f, pickupItem.transform.localScale.z);
 
             pickupTriggered = false;
+            holdingItem = true;
+        }
+    }
+
+    public void OnItemThrow(InputAction.CallbackContext context)
+    {
+        if (context.performed && holdingItem)
+        {
+            pickupItem.GetComponent<Item>().ThrowItem();
+            holdingItem = false;
         }
     }
 
@@ -79,7 +95,6 @@ public class CharacterMovement : MonoBehaviour
     {
         if (other.gameObject.layer == 6)
         {
-            Debug.Log("correct layer");
             pickupItem = other.gameObject;
             pickupTriggered = true;
         }

@@ -6047,6 +6047,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5916366722318415878}
   - component: {fileID: 2116048071419158310}
+  - component: {fileID: 6362050444244822626}
   m_Layer: 0
   m_Name: CountrySoldier2
   m_TagString: Untagged
@@ -6071,7 +6072,7 @@ Transform:
   - {fileID: 1812755977118342591}
   - {fileID: 7815346444290201999}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &2116048071419158310
 Animator:
@@ -6094,6 +6095,28 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!64 &6362050444244822626
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6118711782507832605}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!1 &6150116850536148177
 GameObject:
   m_ObjectHideFlags: 0

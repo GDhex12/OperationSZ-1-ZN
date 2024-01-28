@@ -1078,6 +1078,7 @@ GameObject:
   - component: {fileID: 6148654322620639022}
   - component: {fileID: 7805873138072500557}
   - component: {fileID: 4242882144998808755}
+  - component: {fileID: 1013807512603923163}
   m_Layer: 0
   m_Name: CountryTank1
   m_TagString: Untagged
@@ -1092,7 +1093,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7701546606305936770}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 17.11, y: 0.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1102,7 +1103,7 @@ Transform:
   - {fileID: 72056379120203290}
   - {fileID: 1092519680011462604}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7805873138072500557
 MeshFilter:
@@ -1154,6 +1155,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &1013807512603923163
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7701546606305936770}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -107092546121182573, guid: a6c5055a477c2f84fad37cc073325ca8, type: 3}
 --- !u!1 &8216185796760607073
 GameObject:
   m_ObjectHideFlags: 0
