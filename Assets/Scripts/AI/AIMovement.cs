@@ -46,7 +46,7 @@ public class AIMovement : MonoBehaviour
 
     Vector3 movement_rel;
 
-    NavMeshPath navigationPath; 
+    NavMeshPath navigationPath;
     bool recalculatePath;
     float timeToRecalculate = 0.5f;
     float time = 5;
@@ -61,7 +61,7 @@ public class AIMovement : MonoBehaviour
     float circlingRadius = 10;
     Vector3 circle;
     [SerializeField]
-    float waypointDelayFixed=3;
+    float waypointDelayFixed = 3;
     [SerializeField]
     bool randomisedDelay;
     [SerializeField]
@@ -79,7 +79,7 @@ public class AIMovement : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    { 
+    {
         rb = GetComponent<Rigidbody>();
         Path = Waypoints[0].transform.position;
     }
@@ -98,17 +98,17 @@ public class AIMovement : MonoBehaviour
                 pathPoints.Add(point);
             }
         }
-        if(randomisedDelay && waypointDelay < timeDelay)
+        if (randomisedDelay && waypointDelay < timeDelay)
         {
             UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
-            timeDelay = UnityEngine.Random.Range(waypointDelayMin, waypointDelayMax);
+            waypointDelay = UnityEngine.Random.Range(waypointDelayMin, waypointDelayMax);
         }
-        if(!randomisedDelay)
+        if (!randomisedDelay)
         {
-            timeDelay = waypointDelayFixed;
+            waypointDelay = waypointDelayFixed;
         }
 
-        if((Path - transform.position).magnitude <5)
+        if ((Path - transform.position).magnitude < 5)
         {
             timeDelay += Time.deltaTime;
         }
@@ -120,8 +120,8 @@ public class AIMovement : MonoBehaviour
             recalculatePath = true;
         }
 
-        if(waypointDelay < timeDelay)
-        findtarget();
+        if (waypointDelay < timeDelay)
+            findtarget();
 
         animator_m.SetBool("playerSeen", playerSeen);
     }
@@ -137,7 +137,7 @@ public class AIMovement : MonoBehaviour
             GotoNextPoint();
         }
 
-        if(playerSeen)
+        if (playerSeen)
         {
             CircleAround();
         }
@@ -145,13 +145,13 @@ public class AIMovement : MonoBehaviour
 
     void CircleAround()
     {
-        
+
         UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
-        if(circle == Vector3.zero)
-        circle = new Vector3((UnityEngine.Random.value - 0.5f) * 2, 0, (UnityEngine.Random.value - 0.5f) * 2).normalized * circlingRadius;
+        if (circle == Vector3.zero)
+            circle = new Vector3((UnityEngine.Random.value - 0.5f) * 2, 0, (UnityEngine.Random.value - 0.5f) * 2).normalized * circlingRadius;
         if ((Path - transform.position).magnitude < 5f)
-        circle = new Vector3((UnityEngine.Random.value-0.5f)*2, 0 ,(UnityEngine.Random.value-0.5f)*2).normalized * circlingRadius;
-        
+            circle = new Vector3((UnityEngine.Random.value - 0.5f) * 2, 0, (UnityEngine.Random.value - 0.5f) * 2).normalized * circlingRadius;
+
 
         Path = playerTransform.position + circle;
         timeDelay = 0;
@@ -192,7 +192,7 @@ public class AIMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(pathPoints.Count == 0)
+        if (pathPoints.Count == 0)
         {
             playerSeen = false; recalculatePath = true; Path = Waypoints[destpoint].transform.position;
         }
@@ -200,7 +200,7 @@ public class AIMovement : MonoBehaviour
         if (pathPoints.Count > 1)
         {
             movement_rel = new Vector3(pathPoints[1].x - transform.position.x, 0, pathPoints[1].z - transform.position.z).normalized;
-            if((pathPoints[1]-transform.position).magnitude < 2 && pathPoints.Count > 2)
+            if ((pathPoints[1] - transform.position).magnitude < 2 && pathPoints.Count > 2)
             {
                 movement_rel = new Vector3(pathPoints[2].x - transform.position.x, 0, pathPoints[2].z - transform.position.z).normalized;
             }
@@ -208,7 +208,7 @@ public class AIMovement : MonoBehaviour
         if ((transform.position - Path).magnitude < 2f)
             movement_rel = Vector3.zero;
 
-            if (movement_rel.magnitude != 0)
+        if (movement_rel.magnitude != 0)
         {
             if (!run)
                 rb.AddForce(movement_rel * (maxWalkSpeed - rb.velocity.magnitude) * speed);
@@ -231,7 +231,7 @@ public class AIMovement : MonoBehaviour
             vecInterpol = Vector3.Slerp(transform.forward, new Vector3(playerTransform.position.x - transform.position.x, 0, playerTransform.position.z - transform.position.z).normalized, lerp);
 
         if ((transform.position - Path).magnitude > 2f)
-        transform.rotation = Quaternion.LookRotation(vecInterpol);
+            transform.rotation = Quaternion.LookRotation(vecInterpol);
 
 
         float dotResult = (90 - viewConeDegrees) / 90;
@@ -242,13 +242,13 @@ public class AIMovement : MonoBehaviour
                 {
                     RaycastHit hit;
                     Physics.Raycast(transform.position, (playerTransform.position - transform.position).normalized, out hit, viewDistance);
-                if (hit.transform.gameObject.layer == 3) 
-                    playerSeen = true;
+                    if (hit.transform.gameObject.layer == 3)
+                        playerSeen = true;
                 }
 
         if (playerSeen)
             if ((playerTransform.position - transform.position).magnitude > 50) playerSeen = false;
-       
+
     }
 
     private void OnDrawGizmos()
