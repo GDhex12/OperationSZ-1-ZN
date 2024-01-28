@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Ammotypes;
 
 public class Bullet1 : MonoBehaviour
@@ -32,7 +33,7 @@ public class Bullet1 : MonoBehaviour
     float splashdamage;
     [SerializeField]
     float timetoexplode;
-    float explodealarm;
+    float explodealarm = 0;
 
     float startingarmor;
     float startingHEarmor;
@@ -46,6 +47,14 @@ public class Bullet1 : MonoBehaviour
     Transform holeParent;
     Quaternion holeRotation;
     float instantiationTime = 1000;
+
+    [SerializeField]
+    bool grenade;
+    [SerializeField]
+    bool arm;
+    public bool activate;
+
+    float grenadeExplodeTime = 0;
 
 
     void Awake()
@@ -95,6 +104,7 @@ public class Bullet1 : MonoBehaviour
             }
         }
 
+        if(!grenade)
         explodealarm = Time.fixedTime + timetoexplode;
         
     }
@@ -102,7 +112,27 @@ public class Bullet1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (explodealarm < Time.fixedTime && timetoexplode != 0)
+
+        if(activate && !arm)
+        {
+            var mouse = Mouse.current;
+            Debug.Log(mouse.leftButton.ReadValue() + " " + mouse.leftButton.wasPressedThisFrame);
+           arm = (mouse.leftButton.ReadValue() == 1 && mouse.leftButton.wasPressedThisFrame);
+        }
+
+        if (grenade && arm && explodealarm == 0)
+        {
+            explodealarm = timetoexplode;
+        }
+
+        if(explodealarm != 0 && arm && grenade)
+        {
+            grenadeExplodeTime += Time.deltaTime;
+
+            if(grenadeExplodeTime > explodealarm) explode();
+        }
+
+        if (explodealarm < Time.fixedTime && timetoexplode != 0 && !grenade)
         {
             explode();
         }
@@ -145,74 +175,79 @@ public class Bullet1 : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-       float armorratiopen;
-       health targetstats = collision.collider.GetComponent<health>();
-        penvelocity = projectile.velocity;
-
-        if (targetstats != null && timetoexplode == 0)
+        if(!grenade)
         {
-            Vector3 projectilepos = transform.forward;
-            impactpoint = collision.contacts[0].point;
+            float armorratiopen;
+            health targetstats = collision.collider.GetComponent<health>();
+            penvelocity = projectile.velocity;
 
-            targetstats.forceVector = projectile.velocity.normalized;
-            targetstats.force = projectile.velocity.magnitude * projectile.mass;
-            targetstats.contactPoint = collision.contacts[0].point;
-            targetstats.cuttingNormal = gameObject.transform.right;
-
-            Vector3 objectpos = new Vector3(impactpoint.x - transform.position.x, impactpoint.y - transform.position.y, impactpoint.z - transform.position.z);
-            float angle = Vector3.Angle(projectilepos.normalized, objectpos.normalized);
-            if(angle<(70-(targetstats.armor*5)))
+            if (targetstats != null && timetoexplode == 0)
             {
-                if (armorpen != 0)
-                { armorratiopen = targetstats.armor * Mathf.Clamp((angle / 1.5f), 0, armorpen) / armorpen; }
-                else
-                { armorratiopen = targetstats.armor; }
+                Vector3 projectilepos = transform.forward;
+                impactpoint = collision.contacts[0].point;
 
-                if (armorratiopen <= 0.2f)
-                { targetstats.HP = targetstats.HP - Mathf.Clamp(damage - targetstats.armor,0,damage);
-                    CreateBulletHole(holeParent, holePos, holeRotation);
-                }
-                
-                    if(armorpen > 0)
+                targetstats.forceVector = projectile.velocity.normalized;
+                targetstats.force = projectile.velocity.magnitude * projectile.mass;
+                targetstats.contactPoint = collision.contacts[0].point;
+                targetstats.cuttingNormal = gameObject.transform.right;
+
+                Vector3 objectpos = new Vector3(impactpoint.x - transform.position.x, impactpoint.y - transform.position.y, impactpoint.z - transform.position.z);
+                float angle = Vector3.Angle(projectilepos.normalized, objectpos.normalized);
+                if (angle < (70 - (targetstats.armor * 5)))
+                {
+                    if (armorpen != 0)
+                    { armorratiopen = targetstats.armor * Mathf.Clamp((angle / 1.5f), 0, armorpen) / armorpen; }
+                    else
+                    { armorratiopen = targetstats.armor; }
+
+                    if (armorratiopen <= 0.2f)
                     {
-   
-                    targetstats.armor = targetstats.armor - Mathf.Clamp(Mathf.Log((armorpen/(0.37f* targetstats.startingarmor*(angle+ targetstats.startingarmor/17))),10) * 0.2f, 0, targetstats.armor);
-                    CreateBulletHole(holeParent, holePos, holeRotation);
-                }
-                
+                        targetstats.HP = targetstats.HP - Mathf.Clamp(damage - targetstats.armor, 0, damage);
+                        CreateBulletHole(holeParent, holePos, holeRotation);
+                    }
 
-                if(armorratiopen <= 1)
-                {
-                armorpen = Mathf.Clamp((armorpen - targetstats.armor), 0f, armorpen);
-                projectile.velocity = transform.forward * Mathf.Clamp((penvelocity.magnitude-(targetstats.armor*25)),0,penvelocity.magnitude);
-                    projCollider.isTrigger = true;
-                    targetstats.penned = true;
+                    if (armorpen > 0)
+                    {
 
+                        targetstats.armor = targetstats.armor - Mathf.Clamp(Mathf.Log((armorpen / (0.37f * targetstats.startingarmor * (angle + targetstats.startingarmor / 17))), 10) * 0.2f, 0, targetstats.armor);
+                        CreateBulletHole(holeParent, holePos, holeRotation);
+                    }
+
+
+                    if (armorratiopen <= 1)
+                    {
+                        armorpen = Mathf.Clamp((armorpen - targetstats.armor), 0f, armorpen);
+                        projectile.velocity = transform.forward * Mathf.Clamp((penvelocity.magnitude - (targetstats.armor * 25)), 0, penvelocity.magnitude);
+                        projCollider.isTrigger = true;
+                        targetstats.penned = true;
+
+
+                    }
+                    else
+                    {
+                        Destroy(gameObject);
+                    }
 
                 }
                 else
                 {
-                 Destroy(gameObject);
+                    if (explosive)
+                        explode();
+                    else
+                        spark(penvelocity);
                 }
-                
+
             }
-            else
+            if (explosive && explodealarm < Time.fixedTime)
             {
-                if(explosive)
-                explode(); 
-                else
+                explode();
+            }
+            if (targetstats == null && !explosive)
+            {
                 spark(penvelocity);
             }
-
         }
-        if (explosive && explodealarm < Time.fixedTime)
-        {
-            explode();
-        }
-        if (targetstats == null && !explosive)
-        {
-            spark(penvelocity);
-        }
+       
 
     }
 

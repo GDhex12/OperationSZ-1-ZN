@@ -8,7 +8,7 @@ public class Item : MonoBehaviour
     {      
         GetComponent<Rigidbody>().isKinematic = false;
         GetComponent<Rigidbody>().useGravity = true;
-        GetComponent<BoxCollider>().enabled = true;
+        GetComponent<Collider>().enabled = true;
         GetComponent<Rigidbody>().AddForce(-transform.right * 10, ForceMode.Impulse);
         transform.parent = null;
     }

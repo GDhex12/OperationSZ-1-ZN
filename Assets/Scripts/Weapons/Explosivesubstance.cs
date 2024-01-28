@@ -20,6 +20,11 @@ public class Explosivesubstance : MonoBehaviour
     float HEradiusbullet;
     float splashdamagebullet;
 
+    [SerializeField]
+    bool grenade;
+    [SerializeField]
+    bool activate;
+
     void Start()
     {
         health = GetComponentInChildren<health>();

@@ -69,7 +69,11 @@ public class CharacterMovement : MonoBehaviour
             {
                 wc.activate = true;
             }
-            pickupItem.GetComponent<BoxCollider>().enabled = false;
+            if (pickupItem.TryGetComponent(out Bullet1 bu))
+            {
+                bu.activate = true;
+            }
+            pickupItem.GetComponent<Collider>().enabled = false;
             pickupItem.transform.parent = itemLocation;
 
             pickupItem.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
