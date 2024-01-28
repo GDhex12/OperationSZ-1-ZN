@@ -39,6 +39,7 @@ public class AIMovement : MonoBehaviour
     [SerializeField]
     private Transform gunBarrelEnd;
 
+    Animator animator_m;
 
     int newpathindex = 0;
     int oldpathindex = 0;
@@ -73,6 +74,7 @@ public class AIMovement : MonoBehaviour
     private void Awake()
     {
         navigationPath = new NavMeshPath();
+        animator_m = GetComponent<Animator>();
     }
 
     // Start is called before the first frame update
@@ -121,6 +123,7 @@ public class AIMovement : MonoBehaviour
         if(waypointDelay < timeDelay)
         findtarget();
 
+        animator_m.SetBool("playerSeen", playerSeen);
     }
 
     void findtarget()
@@ -189,6 +192,11 @@ public class AIMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if(pathPoints.Count == 0)
+        {
+            playerSeen = false; recalculatePath = true;
+        }
+
         if (pathPoints.Count > 1)
         {
             movement_rel = new Vector3(pathPoints[1].x - transform.position.x, 0, pathPoints[1].z - transform.position.z).normalized;
@@ -216,15 +224,15 @@ public class AIMovement : MonoBehaviour
         rb.AddForce(transform.up * -gravity);
         Vector3 vecInterpol = Vector3.zero;
         float angle = 0;
-        if (!playerSeen)
-        vecInterpol = Vector3.Slerp(transform.forward, movement_rel, lerp);
-        else
-        angle = Vector3.SignedAngle(gunBarrelEnd.forward, Path-gunBarrelEnd.position,Vector3.up);
 
-        if ((transform.position - Path).magnitude > 5f && !playerSeen)
+        if (!playerSeen)
+            vecInterpol = Vector3.Slerp(transform.forward, movement_rel, lerp);
+        else
+            vecInterpol = Vector3.Slerp(transform.forward, new Vector3(playerTransform.position.x - transform.position.x, 0, playerTransform.position.z - transform.position.z).normalized, lerp);
+
+        if ((transform.position - Path).magnitude > 2f)
         transform.rotation = Quaternion.LookRotation(vecInterpol);
-        if (playerSeen)
-            transform.rotation *= Quaternion.FromToRotation(Vector3.Project(gunBarrelEnd.forward,Vector3.up), Vector3.Project(Path - gunBarrelEnd.position,Vector3.up));
+
 
         float dotResult = (90 - viewConeDegrees) / 90;
 
@@ -240,7 +248,7 @@ public class AIMovement : MonoBehaviour
 
         if (playerSeen)
             if ((playerTransform.position - transform.position).magnitude > 50) playerSeen = false;
-
+       
     }
 
     private void OnDrawGizmos()
