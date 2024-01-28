@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System;
 
 public class AIMovement : MonoBehaviour
 {
@@ -55,6 +56,17 @@ public class AIMovement : MonoBehaviour
     bool playerSeen = false;
     [SerializeField]
     float circlingRadius = 10;
+    Vector3 circle;
+    [SerializeField]
+    float waypointDelayFixed=3;
+    [SerializeField]
+    bool randomisedDelay;
+    [SerializeField]
+    float waypointDelayMax = 5;
+    [SerializeField]
+    float waypointDelayMin = 0;
+    float waypointDelay = 3;
+    float timeDelay = 0;
 
     private void Awake()
     {
@@ -82,6 +94,20 @@ public class AIMovement : MonoBehaviour
                 pathPoints.Add(point);
             }
         }
+        if(randomisedDelay && waypointDelay < timeDelay)
+        {
+            UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
+            timeDelay = UnityEngine.Random.Range(waypointDelayMin, waypointDelayMax);
+        }
+        if(!randomisedDelay)
+        {
+            timeDelay = waypointDelayFixed;
+        }
+
+        if((Path - transform.position).magnitude <5)
+        {
+            timeDelay += Time.deltaTime;
+        }
 
         time += Time.deltaTime;
         if (time > timeToRecalculate)
@@ -89,16 +115,18 @@ public class AIMovement : MonoBehaviour
             time = 0;
             recalculatePath = true;
         }
+
+        if(waypointDelay < timeDelay)
         findtarget();
 
     }
 
     void findtarget()
     {
-        if (Path != Waypoints[destpoint].transform.position)
+        if (Path != Waypoints[destpoint].transform.position && !playerSeen)
         { Path = Waypoints[destpoint].transform.position; recalculatePath = true; }
 
-        if (Vector3.Magnitude(Waypoints[destpoint].transform.position - transform.position) < 2f && !playerSeen)
+        if ((Waypoints[destpoint].transform.position - transform.position).magnitude < 2f && !playerSeen)
         {
             recalculatePath = true;
             GotoNextPoint();
@@ -106,17 +134,22 @@ public class AIMovement : MonoBehaviour
 
         if(playerSeen)
         {
-            Debug.Log("seen");
             CircleAround();
         }
     }
-    Vector3 circle;
+
     void CircleAround()
     {
-        if(Vector3.Magnitude(Path - transform.position) < 2f)
-        circle = new Vector3(Random.value, 0 ,Random.value) * circlingRadius;
         
+        UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
+        if(circle == Vector3.zero)
+        circle = new Vector3((UnityEngine.Random.value - 0.5f) * 2, 0, (UnityEngine.Random.value - 0.5f) * 2).normalized * circlingRadius;
+        if ((Path - transform.position).magnitude < 5f)
+        circle = new Vector3((UnityEngine.Random.value-0.5f)*2, 0 ,(UnityEngine.Random.value-0.5f)*2).normalized * circlingRadius;
+        
+
         Path = playerTransform.position + circle;
+        timeDelay = 0;
     }
 
     void GotoNextPoint()
@@ -145,7 +178,7 @@ public class AIMovement : MonoBehaviour
         { destpoint = 0; }
         // Set the agent to go to the currently selected destination.
         Path = Waypoints[destpoint].transform.position;
-
+        timeDelay = 0;
         // Choose the next point in the array as the destination,
         // cycling to the start if necessary.
 
@@ -162,8 +195,10 @@ public class AIMovement : MonoBehaviour
                 movement_rel = new Vector3(pathPoints[2].x - transform.position.x, 0, pathPoints[2].z - transform.position.z).normalized;
             }
         }
+        if ((transform.position - Path).magnitude < 2f)
+            movement_rel = Vector3.zero;
 
-        if (movement_rel.magnitude != 0)
+            if (movement_rel.magnitude != 0)
         {
             if (!run)
                 rb.AddForce(movement_rel * (maxWalkSpeed - rb.velocity.magnitude) * speed);
@@ -176,47 +211,49 @@ public class AIMovement : MonoBehaviour
         {
             rb.AddForce(-rb.velocity * drag);
         }
+        rb.AddForce(transform.up * -gravity);
         Vector3 vecInterpol = Vector3.Slerp(transform.forward, movement_rel, lerp);
+        if((transform.position - Path).magnitude > 5f)
         transform.rotation = Quaternion.LookRotation(vecInterpol);
 
         float dotResult = (90 - viewConeDegrees) / 90;
 
-       // if (!playerSeen)
+        if (!playerSeen)
             if ((playerTransform.position - transform.position).magnitude < viewDistance)
                 if (Vector3.Dot(transform.forward, (playerTransform.position - transform.position).normalized) > dotResult)
                 {
                     RaycastHit hit;
                     Physics.Raycast(transform.position, (playerTransform.position - transform.position).normalized, out hit, viewDistance);
-                if (hit.transform.gameObject.layer == LayerMask.GetMask("Player")) 
+                if (hit.transform.gameObject.layer == 3) 
                     playerSeen = true;
                 }
 
-        //if (playerSeen)
-        //    if ((playerTransform.position - transform.position).magnitude > 50) playerSeen = false;
+        if (playerSeen)
+            if ((playerTransform.position - transform.position).magnitude > 50) playerSeen = false;
 
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
 
-    //    if (navigationPath != null)
-    //    {
-    //        for (int i = 0; i < pathPoints.Count; i++)
-    //        {
+        if (navigationPath != null)
+        {
+            for (int i = 0; i < pathPoints.Count; i++)
+            {
 
-    //            if (i < pathPoints.Count) { Gizmos.color = Color.red; Gizmos.DrawSphere(pathPoints[i], 1); }
-
-
-    //           // if (i < pathPoints.Count - 1) { Debug.DrawLine(pathPoints[i], pathPoints[i + 1], UnityEngine.Color.red); }
+                if (i < pathPoints.Count) { Gizmos.color = Color.red; Gizmos.DrawSphere(pathPoints[i], 1); }
 
 
+                // if (i < pathPoints.Count - 1) { Debug.DrawLine(pathPoints[i], pathPoints[i + 1], UnityEngine.Color.red); }
 
 
 
-    //        }
-    //    }
 
-    //}
+
+            }
+        }
+
+    }
 
 }

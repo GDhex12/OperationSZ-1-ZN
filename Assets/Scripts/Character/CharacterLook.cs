@@ -10,7 +10,7 @@ public class CharacterLook : MonoBehaviour
     float Yrot = 0f;
     Vector2 mousePos;
     Vector2 mousePosStart = new Vector2(0, 0);
-    Camera camera;
+    new Camera camera;
     Controls playerInput;
     [SerializeField]
     Rigidbody rb;
