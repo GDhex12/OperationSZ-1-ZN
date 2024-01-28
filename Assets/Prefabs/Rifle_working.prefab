@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 3881327687222485536}
   - component: {fileID: 3205298529296259364}
   - component: {fileID: 8196446782637770009}
+  - component: {fileID: 8604603771454049574}
   m_Layer: 6
   m_Name: Rifle_working
   m_TagString: Untagged
@@ -222,7 +223,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 624270676327525987, guid: 881c74107b1a2ee4f97a22de27d77fa8, type: 3}
 --- !u!65 &3205298529296259364
@@ -268,11 +269,23 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8604603771454049574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2772694228998096141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba9a7f8cffb2b264d8072e176fa3c5e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5533368501726415925
 GameObject:
   m_ObjectHideFlags: 0
