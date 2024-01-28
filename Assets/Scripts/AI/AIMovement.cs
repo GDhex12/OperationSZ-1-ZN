@@ -194,7 +194,7 @@ public class AIMovement : MonoBehaviour
     {
         if(pathPoints.Count == 0)
         {
-            playerSeen = false; recalculatePath = true;
+            playerSeen = false; recalculatePath = true; Path = Waypoints[destpoint].transform.position;
         }
 
         if (pathPoints.Count > 1)
