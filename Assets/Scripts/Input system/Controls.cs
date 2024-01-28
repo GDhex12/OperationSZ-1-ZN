@@ -71,6 +71,24 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PickUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""56f3a2ad-654a-44d5-a44e-92a5979cc10f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ThrowItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""c3205b96-854d-4469-8652-d1a55a374732"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -172,6 +190,28 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Mouse"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1d071418-dfa6-45f2-b668-eb6f75a3b366"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PickUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""687021d5-520d-487b-b773-071c4c5023ff"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ThrowItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -185,6 +225,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_OnFoot_Jump = m_OnFoot.FindAction("Jump", throwIfNotFound: true);
         m_OnFoot_Crouch = m_OnFoot.FindAction("Crouch", throwIfNotFound: true);
         m_OnFoot_Mouse = m_OnFoot.FindAction("Mouse", throwIfNotFound: true);
+        m_OnFoot_PickUp = m_OnFoot.FindAction("PickUp", throwIfNotFound: true);
+        m_OnFoot_ThrowItem = m_OnFoot.FindAction("ThrowItem", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -251,6 +293,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_OnFoot_Jump;
     private readonly InputAction m_OnFoot_Crouch;
     private readonly InputAction m_OnFoot_Mouse;
+    private readonly InputAction m_OnFoot_PickUp;
+    private readonly InputAction m_OnFoot_ThrowItem;
     public struct OnFootActions
     {
         private @Controls m_Wrapper;
@@ -260,6 +304,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_OnFoot_Jump;
         public InputAction @Crouch => m_Wrapper.m_OnFoot_Crouch;
         public InputAction @Mouse => m_Wrapper.m_OnFoot_Mouse;
+        public InputAction @PickUp => m_Wrapper.m_OnFoot_PickUp;
+        public InputAction @ThrowItem => m_Wrapper.m_OnFoot_ThrowItem;
         public InputActionMap Get() { return m_Wrapper.m_OnFoot; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -284,6 +330,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Mouse.started += instance.OnMouse;
             @Mouse.performed += instance.OnMouse;
             @Mouse.canceled += instance.OnMouse;
+            @PickUp.started += instance.OnPickUp;
+            @PickUp.performed += instance.OnPickUp;
+            @PickUp.canceled += instance.OnPickUp;
+            @ThrowItem.started += instance.OnThrowItem;
+            @ThrowItem.performed += instance.OnThrowItem;
+            @ThrowItem.canceled += instance.OnThrowItem;
         }
 
         private void UnregisterCallbacks(IOnFootActions instance)
@@ -303,6 +355,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Mouse.started -= instance.OnMouse;
             @Mouse.performed -= instance.OnMouse;
             @Mouse.canceled -= instance.OnMouse;
+            @PickUp.started -= instance.OnPickUp;
+            @PickUp.performed -= instance.OnPickUp;
+            @PickUp.canceled -= instance.OnPickUp;
+            @ThrowItem.started -= instance.OnThrowItem;
+            @ThrowItem.performed -= instance.OnThrowItem;
+            @ThrowItem.canceled -= instance.OnThrowItem;
         }
 
         public void RemoveCallbacks(IOnFootActions instance)
@@ -327,5 +385,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
         void OnMouse(InputAction.CallbackContext context);
+        void OnPickUp(InputAction.CallbackContext context);
+        void OnThrowItem(InputAction.CallbackContext context);
     }
 }
